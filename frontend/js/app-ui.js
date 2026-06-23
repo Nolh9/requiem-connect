@@ -71,3 +71,41 @@ document.getElementById('newChannelBtn')?.addEventListener('click',async()=>{
   try{const payload=await api.request('/api/channels',{method:'POST',body:JSON.stringify({name:name.trim(),description:'Salon textuel personnalisé.'})});channels.push(payload.channel);activeChannel=payload.channel.id;localStorage.setItem('requiem.activeChannel',activeChannel);renderChannels();renderHeader();await loadMessages();}catch(err){alert(err.message);}
 });
 boot();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const emojiBtn = document.getElementById('emojiBtn');
+    const picker = document.getElementById('emojiPicker');
+    const input = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    if (emojiBtn && picker) {
+        emojiBtn.addEventListener('click', () => {
+            picker.classList.toggle('hidden');
+        });
+
+        picker.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                input.value += btn.textContent;
+                input.focus();
+            });
+        });
+    }
+
+    if(sendBtn && input){
+        sendBtn.addEventListener('click', () => {
+            const ev = new KeyboardEvent('keydown', {
+                key: 'Enter',
+                code: 'Enter',
+                bubbles: true
+            });
+
+            input.dispatchEvent(ev);
+        });
+    }
+
+    input?.addEventListener('paste', () => {
+        console.log('Contenu collé dans le chat');
+    });
+});
+

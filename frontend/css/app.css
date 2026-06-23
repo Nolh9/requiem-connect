@@ -2,137 +2,89 @@
 .empty-state{color:var(--muted);text-align:center;margin-top:40px}.form-error{color:#ff6b6b;font-weight:700}.chat-actions input:focus,.composer input:focus{outline:1px solid var(--red2)}
 body::before{content:"";position:fixed;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.96),rgba(0,0,0,.72)),url('../assets/japan-resident-poster.png') center/cover no-repeat;z-index:-2}body::after{content:"";position:fixed;inset:0;background:radial-gradient(circle at 72% 18%,rgba(193,18,31,.28),transparent 25%),linear-gradient(180deg,rgba(255,255,255,.025),transparent);z-index:-1}.workspace-panel,.friends-panel,.chat-panel{backdrop-filter:blur(18px);background:rgba(10,10,12,.82)}.server-rail{background:rgba(0,0,0,.88)}.chat-header,.workspace-header,.user-bottom,.composer{background:rgba(3,3,4,.55)}.channel.active{box-shadow:inset 3px 0 0 var(--red2);background:linear-gradient(90deg,rgba(193,18,31,.22),rgba(255,255,255,.04))}.message{border-radius:14px}.message:hover{background:rgba(255,255,255,.035)}.composer input{background:rgba(18,20,24,.88);border-color:rgba(193,18,31,.28);box-shadow:0 0 0 1px rgba(0,0,0,.3)}.chat-actions input{background:rgba(0,0,0,.45)}.server-icon.active{box-shadow:0 0 28px rgba(193,18,31,.32)}
 
-.discord-layout{
-display:flex;
-position:fixed;
-left:0;
-top:0;
-height:100vh;
-z-index:100;
-}
 
-.servers-panel{
-width:80px;
-background:#090909;
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:14px;
-padding:14px 0;
-}
-
-.server-logo,
-.server-add{
-width:55px;
-height:55px;
-border:none;
-border-radius:18px;
-background:#181818;
-color:white;
-font-size:22px;
-cursor:pointer;
-}
-
-.channels-panel{
-width:260px;
-background:#121212;
-padding:18px;
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.channel-item{
-height:42px;
-border:none;
-border-radius:12px;
-background:#1a1a1a;
-color:white;
-cursor:pointer;
-text-align:left;
-padding:0 14px;
-}
-
-.channel-item.active,
-.channel-item:hover{
+.send-btn{
 background:#8b0000;
-}
-
-.composer{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:10px;
-}
-
-.composer input{
-flex:1;
-height:52px;
-border-radius:16px;
-padding:0 16px;
-}
-
-.composer button{
-height:52px;
-min-width:52px;
+color:white;
 border:none;
-border-radius:14px;
+padding:10px 18px;
+border-radius:12px;
 cursor:pointer;
+font-weight:700;
+transition:.2s;
 }
 
-.settings-modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.8);
+.send-btn:hover{
+background:#c00000;
+transform:translateY(-1px);
+}
+
+.emoji-picker{
+position:absolute;
+bottom:90px;
+right:320px;
 display:flex;
-align-items:center;
-justify-content:center;
+flex-wrap:wrap;
+gap:8px;
+padding:14px;
+background:rgba(10,10,10,.95);
+border:1px solid rgba(255,0,0,.35);
+border-radius:16px;
+backdrop-filter:blur(14px);
+max-width:260px;
+box-shadow:0 0 25px rgba(255,0,0,.25);
+z-index:999;
 }
 
-.settings-modal.hidden{
+.emoji-picker.hidden{
 display:none;
 }
 
-.settings-container{
-width:1000px;
-height:650px;
-background:#111;
-border-radius:24px;
-display:flex;
-overflow:hidden;
-}
-
-.settings-sidebar{
-width:220px;
-background:#0b0b0b;
-padding:20px;
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.settings-sidebar button{
-height:44px;
+.emoji-picker button{
+background:#171717;
 border:none;
-border-radius:12px;
-background:#181818;
 color:white;
+font-size:22px;
+padding:8px;
+border-radius:10px;
+cursor:pointer;
+transition:.2s;
 }
 
-.settings-content{
-flex:1;
-padding:30px;
-color:white;
+.emoji-picker button:hover{
+background:#8b0000;
+transform:scale(1.08);
 }
 
-.settings-content input,
-.settings-content select{
-height:48px;
-border:none;
-border-radius:12px;
-padding:0 14px;
-background:#1a1a1a;
-color:white;
-width:100%;
-margin-bottom:18px;
+.messages{
+scroll-behavior:smooth;
 }
+
+.message{
+animation:fadeIn .18s ease;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(8px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+body{
+background:
+linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.9)),
+url('../assets/japan-resident-poster.png');
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+}
+
+.chat-panel{
+backdrop-filter:blur(10px);
+}
+
