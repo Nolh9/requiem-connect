@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Requiem Connect</title>
+<link rel="icon" type="image/png" href="icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="server-rail">
+    <button class="server-icon active" title="Requiem"><img src="assets/japan-resident-poster.png" alt="Requiem"></button>
+    <button class="server-icon"><span>RC</span></button>
+    <button class="server-icon"><span>日</span></button>
+    <button class="server-icon add" id="newChannelBtn" title="Nouveau salon">+</button>
+  </aside>
+
+  <aside class="workspace-panel">
+    <header class="workspace-header"><strong>Requiem HQ</strong><button>⌄</button></header>
+    <nav class="workspace-menu">
+      <button>📅 Événements</button>
+      <button>🔎 Chercher</button>
+      <button>👥 Membres</button>
+      <button>🛡 Sécurité</button>
+    </nav>
+    <div class="section-title">Salons textuels</div>
+    <div id="channelList"></div>
+    <div class="user-bottom">
+      <div class="user-avatar" data-current-initial>R</div>
+      <div><strong data-current-name>Utilisateur</strong><span data-current-username>@user</span></div>
+      <button id="settingsBtn" title="Paramètres">⚙</button><button id="logoutBtn" title="Déconnexion">⎋</button>
+    </div>
+  </aside>
+
+  <main class="chat-panel">
+    <header class="chat-header">
+      <div><span class="hash">#</span><strong id="activeChannelName">général</strong><small id="activeChannelDesc">Discussion principale.</small></div>
+      <div class="chat-actions"><button id="clearMessages" title="Vider ce salon">🧹</button><button title="Membres">👥</button><input id="searchMessages" placeholder="Rechercher dans ce salon"></div>
+    </header>
+    <section class="messages" aria-live="polite"></section>
+    
+<footer class="composer">
+  <button id="uploadBtn" title="Ajouter un fichier">📎</button>
+  <input id="messageInput" maxlength="1000" placeholder="Message #général">
+  <button id="emojiBtn" title="Emoji">😀</button>
+  <button id="sendBtn" class="send-btn">Envoyer</button>
+</footer>
+
+<div id="emojiPicker" class="emoji-picker hidden">
+  <button>😀</button><button>😂</button><button>🔥</button><button>❤️</button>
+  <button>👀</button><button>😎</button><button>⚠️</button><button>🎌</button>
+  <button>💀</button><button>🩸</button><button>👹</button><button>🚨</button>
+</div>
+
+  </main>
+
+  <aside class="friends-panel">
+    <h3>En ligne — <span id="memberCount">0</span></h3>
+    <div id="memberList"></div>
+  </aside>
+</div>
+<script src="js/api.js"></script>
+<script src="js/app-ui.js"></script>
+</body>
+</html>

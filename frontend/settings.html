@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Requiem Connect</title>
+<link rel="icon" type="image/png" href="icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+<div class="settings-layout">
+  <aside class="settings-sidebar">
+    <div class="user-mini"><div class="avatar" data-initial>R</div><div><strong data-name>Utilisateur</strong><span>Modifier le profil ✎</span></div></div>
+    <input class="settings-search" placeholder="Rechercher">
+    <div class="section-title">Paramètres utilisateur</div>
+    <button class="side-item active" data-tab="account">👤 Mon compte</button>
+    <button class="side-item" data-tab="profile">🪪 Profil</button>
+    <button class="side-item" data-tab="privacy">🛡 Données et confidentialité</button>
+    <button class="side-item" data-tab="notifications">🔔 Notifications</button>
+    <div class="section-title">Paramètres de l'appli</div>
+    <button class="side-item" data-tab="appearance">🎨 Apparence</button>
+    <button class="side-item" data-tab="language">🌐 Langue et heure</button>
+    <button class="side-item danger" id="logoutBtn">➜] Déconnexion</button>
+    <small class="version">requiem stable 2.0.0 backend</small>
+  </aside>
+  <main class="settings-main">
+    <button class="close-btn" onclick="window.location.href='app.html'">×</button>
+    <section class="tab-panel visible" id="account">
+      <h1>Mon compte</h1>
+      <div class="profile-card"><div class="banner"></div><div class="profile-top"><div class="big-avatar" data-initial>R</div><div><h2 data-name>Utilisateur</h2><span data-username>@user</span></div><button class="primary" onclick="document.querySelector('[data-tab=profile]').click()">Modifier profil</button></div>
+      <div class="info-list">
+        <div class="info-row"><div><strong>Nom d'affichage</strong><p data-name>Utilisateur</p></div></div>
+        <div class="info-row"><div><strong>Nom d'utilisateur</strong><p data-username>@user</p></div></div>
+        <div class="info-row"><div><strong>E-mail</strong><p data-email>••••••</p></div></div>
+        <div class="info-row"><div><strong>Mode de communication</strong><p>Texte uniquement</p></div></div>
+      </div></div>
+      <div class="settings-block"><h2>Mot de passe et authentification</h2><p class="muted">Mot de passe haché côté backend avec bcrypt. Les données applicatives sont persistées en SQLite.</p></div>
+    </section>
+    <section class="tab-panel" id="profile"><h1>Profil</h1><form class="settings-block" id="profileForm"><label>Nom d'affichage</label><input name="displayName"><label>Nom d'utilisateur</label><input name="username"><label>Bio</label><textarea name="bio"></textarea><button class="primary" type="submit">Enregistrer</button></form></section>
+    <section class="tab-panel" id="privacy"><h1>Données et confidentialité</h1><div class="settings-block"><label class="switch-row"><span>Afficher mon statut en ligne</span><input type="checkbox" checked></label><label class="switch-row"><span>Autoriser les demandes d'amis</span><input type="checkbox" checked></label></div></section>
+    <section class="tab-panel" id="notifications"><h1>Notifications</h1><div class="settings-block"><label class="switch-row"><span>Messages privés</span><input type="checkbox" checked></label><label class="switch-row"><span>Mentions</span><input type="checkbox" checked></label></div></section>
+    <section class="tab-panel" id="appearance"><h1>Apparence</h1><div class="settings-block"><div class="theme-grid"><button class="theme-card active">Japan Horror</button><button class="theme-card">Noir profond</button><button class="theme-card">R.P.D Rouge</button></div></div></section>
+    <section class="tab-panel placeholder" id="language"><h1>Langue et heure</h1><p>Français · Europe/Paris.</p></section>
+  </main>
+</div>
+<script src="js/api.js"></script>
+<script src="js/settings.js"></script>
+</body>
+</html>

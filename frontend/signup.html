@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Requiem Connect</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body class="auth-page">
+<a class="auth-logo" href="index.html">接続 Requiem Connect</a>
+<form class="auth-card" id="signupForm">
+  <h1>Créer un compte</h1>
+  <p>Inscription.</p>
+  <label>Email</label><input name="email" type="email" required>
+  <label>Nom d'affichage</label><input name="displayName" required>
+  <label>Nom d'utilisateur</label><input name="username" required>
+  <label>Mot de passe</label><input name="password" type="password" required>
+  <button class="btn primary full" type="submit">Créer un compte</button>
+  <a href="login.html" class="small-link">Tu as déjà un compte ? Connecte-toi</a>
+</form>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
