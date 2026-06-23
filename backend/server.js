@@ -17,14 +17,13 @@ const __dirname = path.dirname(__filename);
 const PORT = Number(process.env.PORT || 10000);
 const HOST = '0.0.0.0';
 const JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_ME_REQUIEM_CONNECT_SECRET';
-
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'data', 'requiem.sqlite');
+
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
 const app = express();
 const now = () => new Date().toISOString();
 const normalize = v => String(v || '').trim().toLowerCase();
-
 const publicUser = u => ({
   id: u.id,
   email: u.email,
@@ -71,7 +70,7 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 `);
 
-const channels = [
+const defaultChannels = [
   ['general', 'général', 'Discussion principale du serveur.'],
   ['annonces', 'annonces', 'Informations importantes et décisions.'],
   ['projets', 'projets', 'Suivi opérationnel des projets.'],
@@ -79,7 +78,7 @@ const channels = [
   ['regles', 'règles', 'Cadre d’utilisation du réseau.']
 ];
 
-for (const [id, name, description] of channels) {
+for (const [id, name, description] of defaultChannels) {
   await db.run(
     'INSERT OR IGNORE INTO channels(id,name,description,createdAt) VALUES(?,?,?,?)',
     id,
@@ -92,7 +91,7 @@ for (const [id, name, description] of channels) {
 const messageCount = await db.get('SELECT COUNT(*) AS count FROM messages');
 
 if (!messageCount.count) {
-  const seed = [
+  const seedMessages = [
     ['general', 'Requiem System', 'Bienvenue dans Requiem Connect — communication textuelle sécurisée active.'],
     ['annonces', 'Requiem System', 'Produit configuré en texte uniquement : aucun vocal, aucun bot.'],
     ['projets', 'Requiem System', 'Centraliser ici les décisions, tâches et points bloquants.'],
@@ -100,7 +99,7 @@ if (!messageCount.count) {
     ['regles', 'Requiem System', 'Respect, confidentialité, messages clairs. Aucun spam, aucune commande automatisée.']
   ];
 
-  for (const [channelId, author, body] of seed) {
+  for (const [channelId, author, body] of seedMessages) {
     await db.run(
       'INSERT INTO messages(id,channelId,userId,author,body,createdAt,system) VALUES(?,?,?,?,?,?,1)',
       crypto.randomUUID(),
@@ -115,7 +114,7 @@ if (!messageCount.count) {
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors({ origin: true, credentials: true }));
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '2mb' }));
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 function sign(user) {
@@ -146,11 +145,7 @@ async function auth(req, res, next) {
 }
 
 app.get('/api/health', (_, res) => {
-  res.json({
-    status: 'ok',
-    product: 'requiem-connect',
-    mode: 'text-only'
-  });
+  res.json({ status: 'ok', product: 'requiem-connect', mode: 'text-only' });
 });
 
 app.post('/api/auth/register', async (req, res) => {
@@ -160,21 +155,13 @@ app.post('/api/auth/register', async (req, res) => {
   const password = String(req.body.password || '');
 
   if (!email || !username || !displayName || password.length < 8) {
-    return res.status(400).json({
-      error: 'Données invalides. Mot de passe : 8 caractères minimum.'
-    });
+    return res.status(400).json({ error: 'Données invalides. Mot de passe : 8 caractères minimum.' });
   }
 
-  const exists = await db.get(
-    'SELECT id FROM users WHERE email=? OR username=?',
-    email,
-    username
-  );
+  const exists = await db.get('SELECT id FROM users WHERE email=? OR username=?', email, username);
 
   if (exists) {
-    return res.status(409).json({
-      error: 'Email ou nom utilisateur déjà utilisé.'
-    });
+    return res.status(409).json({ error: 'Email ou nom utilisateur déjà utilisé.' });
   }
 
   const user = {
@@ -196,32 +183,19 @@ app.post('/api/auth/register', async (req, res) => {
     user.createdAt
   );
 
-  res.status(201).json({
-    token: sign(user),
-    user: publicUser(user)
-  });
+  res.status(201).json({ token: sign(user), user: publicUser(user) });
 });
 
 app.post('/api/auth/login', async (req, res) => {
   const login = normalize(req.body.emailOrUsername);
   const password = String(req.body.password || '');
-
-  const user = await db.get(
-    'SELECT * FROM users WHERE email=? OR username=?',
-    login,
-    login
-  );
+  const user = await db.get('SELECT * FROM users WHERE email=? OR username=?', login, login);
 
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
-    return res.status(401).json({
-      error: 'Identifiants invalides.'
-    });
+    return res.status(401).json({ error: 'Identifiants invalides.' });
   }
 
-  res.json({
-    token: sign(user),
-    user: publicUser(user)
-  });
+  res.json({ token: sign(user), user: publicUser(user) });
 });
 
 app.get('/api/me', auth, (req, res) => {
@@ -242,7 +216,6 @@ app.patch('/api/me', auth, async (req, res) => {
   );
 
   const user = await db.get('SELECT * FROM users WHERE id=?', req.user.id);
-
   res.json({ user: publicUser(user) });
 });
 
@@ -252,10 +225,7 @@ app.get('/api/users', auth, async (_, res) => {
 });
 
 app.get('/api/channels', auth, async (_, res) => {
-  const rows = await db.all(
-    'SELECT id,name,description,createdAt FROM channels ORDER BY rowid'
-  );
-
+  const rows = await db.all('SELECT id,name,description,createdAt FROM channels ORDER BY rowid');
   res.json({ channels: rows });
 });
 
@@ -263,10 +233,7 @@ app.post('/api/channels', auth, async (req, res) => {
   const name = normalize(req.body.name)
     .replace(/[^a-z0-9\-à-ÿ]/gi, '-')
     .slice(0, 32);
-
-  const description = String(req.body.description || 'Salon textuel.')
-    .trim()
-    .slice(0, 140);
+  const description = String(req.body.description || 'Salon textuel.').trim().slice(0, 140);
 
   if (!name) {
     return res.status(400).json({ error: 'Nom de salon invalide.' });
@@ -278,22 +245,8 @@ app.post('/api/channels', auth, async (req, res) => {
     .replace(/[^a-z0-9-]/gi, '-');
 
   try {
-    await db.run(
-      'INSERT INTO channels(id,name,description,createdAt) VALUES(?,?,?,?)',
-      id,
-      name,
-      description,
-      now()
-    );
-
-    res.status(201).json({
-      channel: {
-        id,
-        name,
-        description,
-        createdAt: now()
-      }
-    });
+    await db.run('INSERT INTO channels(id,name,description,createdAt) VALUES(?,?,?,?)', id, name, description, now());
+    res.status(201).json({ channel: { id, name, description, createdAt: now() } });
   } catch {
     res.status(409).json({ error: 'Salon déjà existant.' });
   }
@@ -301,22 +254,12 @@ app.post('/api/channels', auth, async (req, res) => {
 
 app.get('/api/channels/:id/messages', auth, async (req, res) => {
   const rows = await db.all(
-    `
-    SELECT 
-      m.id,
-      m.channelId,
-      m.author,
-      m.body,
-      m.createdAt,
-      m.system,
-      u.username,
-      u.displayName
-    FROM messages m
-    LEFT JOIN users u ON u.id = m.userId
-    WHERE m.channelId = ?
-    ORDER BY m.createdAt ASC
-    LIMIT 300
-    `,
+    `SELECT m.id,m.channelId,m.author,m.body,m.createdAt,m.system,u.username,u.displayName
+     FROM messages m
+     LEFT JOIN users u ON u.id=m.userId
+     WHERE m.channelId=?
+     ORDER BY m.createdAt ASC
+     LIMIT 300`,
     req.params.id
   );
 
@@ -325,11 +268,7 @@ app.get('/api/channels/:id/messages', auth, async (req, res) => {
 
 app.post('/api/channels/:id/messages', auth, async (req, res) => {
   const body = String(req.body.body || '').trim().slice(0, 1000);
-
-  const channel = await db.get(
-    'SELECT id FROM channels WHERE id=?',
-    req.params.id
-  );
+  const channel = await db.get('SELECT id FROM channels WHERE id=?', req.params.id);
 
   if (!channel) {
     return res.status(404).json({ error: 'Salon introuvable.' });
@@ -352,16 +291,11 @@ app.post('/api/channels/:id/messages', auth, async (req, res) => {
   );
 
   const message = await db.get('SELECT * FROM messages WHERE id=?', id);
-
   res.status(201).json({ message });
 });
 
 app.delete('/api/channels/:id/messages', auth, async (req, res) => {
-  await db.run(
-    'DELETE FROM messages WHERE channelId=? AND system=0',
-    req.params.id
-  );
-
+  await db.run('DELETE FROM messages WHERE channelId=? AND system=0', req.params.id);
   res.status(204).end();
 });
 

@@ -47,14 +47,3 @@ Puis ouvrir :
 ## Données
 
 La base SQLite est stockée dans `backend/data/requiem.sqlite` ou dans le volume Docker `requiem_data`.
-
-
-## Chat amélioré
-- Emojis intégrés
-- UI plus immersive
-- Bouton d’envoi
-- Picker emoji
-- Animations messages
-- Upload préparé côté UI
-- Vocal supprimé
-- Bots supprimés

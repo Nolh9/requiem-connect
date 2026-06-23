@@ -2,8 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<title>Requiem Connect</title>
-<link rel="icon" type="image/png" href="icon.png">
+<title>Requiem Connect — Communication</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="css/app.css">
 </head>
@@ -39,20 +38,7 @@
       <div class="chat-actions"><button id="clearMessages" title="Vider ce salon">🧹</button><button title="Membres">👥</button><input id="searchMessages" placeholder="Rechercher dans ce salon"></div>
     </header>
     <section class="messages" aria-live="polite"></section>
-    
-<footer class="composer">
-  <button id="uploadBtn" title="Ajouter un fichier">📎</button>
-  <input id="messageInput" maxlength="1000" placeholder="Message #général">
-  <button id="emojiBtn" title="Emoji">😀</button>
-  <button id="sendBtn" class="send-btn">Envoyer</button>
-</footer>
-
-<div id="emojiPicker" class="emoji-picker hidden">
-  <button>😀</button><button>😂</button><button>🔥</button><button>❤️</button>
-  <button>👀</button><button>😎</button><button>⚠️</button><button>🎌</button>
-  <button>💀</button><button>🩸</button><button>👹</button><button>🚨</button>
-</div>
-
+    <footer class="composer"><button title="Ajouter">+</button><input id="messageInput" maxlength="1000" placeholder="Envoyer un message"><button title="Important">!</button><button title="Emoji">😊</button></footer>
   </main>
 
   <aside class="friends-panel">
@@ -64,3 +50,43 @@
 <script src="js/app-ui.js"></script>
 </body>
 </html>
+
+<!-- REQUIEM DISCORD STYLE -->
+<div class="discord-layout">
+<aside class="servers-panel">
+<div class="server-logo">R</div>
+<button class="server-add">+</button>
+</aside>
+
+<aside class="channels-panel">
+<h3>REQUIEM</h3>
+
+<button class="channel-item active"># général</button>
+<button class="channel-item"># annonces</button>
+<button class="channel-item"># média</button>
+
+<h4>PRIVÉ</h4>
+<button class="channel-item">💬 Vincent</button>
+<button class="channel-item">💬 Ami</button>
+</aside>
+</div>
+
+<div class="settings-modal hidden" id="settingsModal">
+<div class="settings-container">
+<div class="settings-sidebar">
+<button>Mon compte</button>
+<button>Confidentialité</button>
+<button>Apparence</button>
+<button>Notifications</button>
+</div>
+
+<div class="settings-content">
+<h2>Paramètres avancés</h2>
+<input placeholder="Pseudo">
+<select>
+<option>En ligne</option>
+<option>Absent</option>
+</select>
+</div>
+</div>
+</div>
